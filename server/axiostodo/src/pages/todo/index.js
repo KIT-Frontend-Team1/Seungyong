@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import { axiosInstance } from "utils/axios";
+import { addTodoApi } from "apis/Apis";
 
 const TodoPage = () => {
   const params = useParams();
@@ -18,6 +19,7 @@ const TodoPage = () => {
   const getTodoList = async () => {
     try {
       const res = await axiosInstance.get("/todo");
+      console.log("getTodoList", res);
       console.log(res);
       setTodoList(res.data.data);
     } catch (err) {
@@ -28,53 +30,90 @@ const TodoPage = () => {
   useEffect(() => {
     getTodoList();
   }, []);
+  // addTodoApi를 주석해제하면 에러가 남 계속남
+  // 컴퓨터 터짐 무한루프에 빠진다...
+  // cup가 100%찍는거 처음봤다ㅋㅋㅋㅋㅋ
+  // addTodoApi()
+  //   .then(() => {
+  //     getTodoList();
+  //     setIsAddTodoModal(false);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
+  // const addTodo = async (title, content) => {
+  //   try {
+  //     if (!title || !content) {
+  //       const err = new Error();
+  //       err.type = "empty error";
+  //       err.message = "빈칸을 채워주세요";
+  //       throw err;
+  //     }
+  //     await axiosInstance.post("/todo", {
+  //       title,
+  //       content,
+  //     });
+  //     getTodoList();
+  //     setIsAddTodoModal(false);
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // };
+  /*
+            데이터의 동기화 호출, 다른 사용자의 업데이트 호출, 안정성
+        */
 
-  const addTodo = async (title, content) => {
-    try {
-      if (!title || !content) {
-        const err = new Error();
-        err.type = "empty error";
-        err.message = "빈칸을 채워주세요";
-        throw err;
-      }
-      await axiosInstance.post("/todo", {
-        title,
-        content,
-      });
-      getTodoList();
-      /* 
-                데이터의 동기화 호출, 다른 사용자의 업데이트 호출, 안정성
-            */
+  // setTodoList([res.data.data, ...todoList])
+  /*
+        낙관적 업데이트 (optimistic update)
+            데이터의 동기화나 일치보다 UX(사용자 경험)개선이 중요할 때 사용
+            반드시 실패 했을 때는 에러 핸들링
+        */
 
-      // setTodoList([res.data.data, ...todoList])
-      /* 
-            낙관적 업데이트 (optimistic update)
-                데이터의 동기화나 일치보다 UX(사용자 경험)개선이 중요할 때 사용
-                반드시 실패 했을 때는 에러 핸들링      
-            */
-      setIsAddTodoModal(false);
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  const showTodoToastMessage = (e) => {
+  // const showTodoToastMessage = (e) => {
+  //   e.preventDefault();
+  //   const title = e.target.title.value;
+  //   const content = e.target.content.value;
+  //   toast
+  //     .promise(addTodoApi(title, content), {
+  //       pending: "TODO LOADING",
+  //       success: "TODO SUCEESS",
+  //       error: "TODO ERROR",
+  //     })
+  //     .catch((err) => {
+  //       if (err.type === "empty error") {
+  //         alert(err.message);
+  //       }
+  //     });
+  // };
+  const showTodoToastMessage = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
     const content = e.target.content.value;
-    toast
-      .promise(addTodo(title, content), {
-        pending: "TODO LOADING",
-        success: "TODO SUCEESS",
-        error: "TODO ERROR",
-      })
-      .catch((err) => {
-        if (err.type === "empty error") {
-          alert(err.message);
-        }
-      });
-  };
 
+    try {
+      await addTodoApi(title, content);
+      toast.success("TODO SUCCESS");
+      getTodoList(); // Fetch the updated todo list
+    } catch (err) {
+      if (err.type === "empty error") {
+        alert(err.message);
+      } else {
+        toast.error("TODO ERROR");
+      }
+    }
+
+    setIsAddTodoModal(false);
+  };
+  // const handleAddTodo = async (title, content) => {
+  //   try {
+  //     await addTodoApi(title, content);
+  //     getTodoList();
+  //     setIsAddTodoModal(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   const toastOption = {
     autoClose: 2000,
     theme: "colored",

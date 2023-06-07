@@ -4,15 +4,19 @@ import { axiosInstance } from "utils/axios";
 import axios from "axios";
 
 const TodoList = ({ todoList, setTodoList }) => {
-  const updateTodo = (id, content) => {
-    const _todoList = [...todoList];
-    const todo = _todoList.find((todo) => todo.id === id);
-    /*
-          불변성을 지키기 위해, find는 새로운 배열을 반환하지 않기 때문에
-          기존에 있는 todolist를 깊은 복사하여 다른 메모리 주소값을 갖게하고 수정한다.
-         */
-    todo.content = content;
-    setTodoList(_todoList);
+  const updateTodo = async (id, editedContent) => {
+    try {
+      await axiosInstance.put(`todo/${id}`, { content: editedContent });
+      const updatedTodoList = todoList.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, content: editedContent };
+        }
+        return todo;
+      });
+      setTodoList(updatedTodoList);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const deleteTodo = async (id) => {
@@ -24,22 +28,7 @@ const TodoList = ({ todoList, setTodoList }) => {
       } catch (error) {
         console.error(error);
       }
-      // 밑에 방법은 setTodoList를 사용할 수가 없다. 그래서 비동기라서 새로고침을 누르지 않으면 삭제는 가능하지만
-      // 랜더링이 되지 않아서 바로 보이지 않는다.
-      // try {
-      //   await axiosInstance.delete(`/todo/${id}`);
-      //   // const res = await axiosInstance.delete(`/todo/${id}`);
-      //   // console.log(res);
-      //   // setTodoList(...TodoList);
-      //   // await deleteTodo(id);
-      //   // const updateTodoList = todoList.filter((todo) => todo.id !== id);
-      //   // setTodoList(updateTodoList);
-      //   // setTodoList = todoList.filter((todo) => todo.id !== id);
-      // } catch (error) {
-      //   console.error(error);
-      // }
     }
-    // window.location.reload();
   };
 
   return (
@@ -90,3 +79,20 @@ export default TodoList;
 
 //   // Usage
 //   deleteTodo();
+
+// 밑에 방법은 setTodoList를 사용할 수가 없다. 그래서 비동기라서 새로고침을 누르지 않으면 삭제는 가능하지만
+// 랜더링이 되지 않아서 바로 보이지 않는다.
+// console.log(res)도 콘솔로 나오지않는다.
+// try {
+//   await axiosInstance.delete(`/todo/${id}`);
+//   // const res = await axiosInstance.delete(`/todo/${id}`);
+//   // console.log(res);
+//   // setTodoList(...TodoList);
+//   // await deleteTodo(id);
+//   // const updateTodoList = todoList.filter((todo) => todo.id !== id);
+//   // setTodoList(updateTodoList);
+//   // setTodoList = todoList.filter((todo) => todo.id !== id);
+// } catch (error) {
+//   console.error(error);
+// }
+// window.location.reload();

@@ -2,94 +2,47 @@ import styled from "styled-components";
 import { flexAlignCenter, flexCenter } from "../../../../styles/common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faBan, faPen } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useInput from "../../../../hooks/use-input";
-import { axiosInstance, axiosdeleteTodo } from "utils/axios";
+import { axiosInstance } from "utils/axios";
 import axios from "axios";
 
-/**
- * @params : todo {
- *  content: string
- * }
- *
- * @TODO : refactor
- */
-
 const OneTodo = ({ todo, updateTodo, deleteTodo }) => {
-  const { id, state, title, content } = todo;
+  const { id, title, content } = todo;
   const [isEditMode, setIsEditMode] = useState(false);
   const [editContent, onChangeEditContent] = useInput(content);
   const [todoList, setTodoList] = useState([]);
+  const [state, setState] = useState(todo.state);
   /*
         과제
         수정을 form 이벤트로 바꾸기
         +
         체크 수정 구현하기
-    */
+        */
 
   const handleTodoEdit = () => {
     if (!isEditMode) return setIsEditMode(true);
     updateTodo(id, editContent);
     setIsEditMode(false);
   };
-  // const axiosdeleteTodo = async (todoId) => {
-  //   try {
-  //     await deleTodo(todoId);
-  //     // 삭제 성공 시 실행할 코드 추가
-  //   } catch (error) {
-  //     // 오류 처리
-  //     console.error(error);
-  //   }
-  // };
-  // const handleTodoDelete = async () => {
-  //   try {
-  //     const data = await axios.delete("http://localhost:9000");
-  //     // 삭제 성공 시 실행할 코드 추가
-  //   } catch (error) {
-  //     // 오류 처리
-  //     console.error(error);
-  //   }
-  // };
-
-  // const getTodoList = async () => {
-  //   try {
-  //     const res = await axiosInstance.get("/todo");
-  //     console.log(res);
-  //     setTodoList(res.data.data);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getTodoList();
-  // }, []);
-  // const handleTodoDelete = async () => {
-  //   try {
-  //     await axiosInstance.delete("/:todoId");
-  //     getTodoList();
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // delete성공 하지만 새로고침해야지 delete가 됨
-  // const handleTodoDelete = async () => {
-  //   try {
-  //     await axiosInstance.delete(`/todo/${id}`);
-  //     // getTodoList();
-  //     setTodoList((prevList) => prevList.filter((todo) => todo.id !== id));
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   const handleTodoDelete = () => {
     deleteTodo(id);
+  };
+  const handleTodoCheck = async () => {
+    const updatedState = !state;
+    try {
+      await axiosInstance.put(`/todo/${id}`, { state: updatedState });
+      updateTodo(id, editContent, updatedState);
+      setState(updatedState);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <S.Wrapper state={state}>
       <S.Header>
-        <S.StateBox state={state}>
+        <S.StateBox state={state} onClick={handleTodoCheck}>
           <FontAwesomeIcon icon={faCheck} />
         </S.StateBox>
         <S.Title state={state}>
@@ -180,3 +133,62 @@ const S = {
   Title,
   Content,
 };
+
+/**
+ * @params : todo {
+ *  content: string
+ * }
+ *
+ * @TODO : refactor
+ */
+
+// const axiosdeleteTodo = async (todoId) => {
+//   try {
+//     await deleTodo(todoId);
+//     // 삭제 성공 시 실행할 코드 추가
+//   } catch (error) {
+//     // 오류 처리
+//     console.error(error);
+//   }
+// };
+// const handleTodoDelete = async () => {
+//   try {
+//     const data = await axios.delete("http://localhost:9000");
+//     // 삭제 성공 시 실행할 코드 추가
+//   } catch (error) {
+//     // 오류 처리
+//     console.error(error);
+//   }
+// };
+
+// const getTodoList = async () => {
+//   try {
+//     const res = await axiosInstance.get("/todo");
+//     setTodoList(res.data.data);
+//     console.log(res);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+// useEffect(() => {
+//   getTodoList();
+// }, []);
+// const handleTodoDelete = async () => {
+//   try {
+//     await axiosInstance.delete("/:todoId");
+//     getTodoList();
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// delete성공 하지만 새로고침해야지 delete가 됨
+// const handleTodoDelete = async () => {
+//   try {
+//     await axiosInstance.delete(`/todo/${id}`);
+//     // getTodoList();
+//     setTodoList((prevList) => prevList.filter((todo) => todo.id !== id));
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
