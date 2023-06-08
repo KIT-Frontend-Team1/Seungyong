@@ -13,12 +13,6 @@ const OneTodo = ({ todo, updateTodo, deleteTodo }) => {
   const [editContent, onChangeEditContent] = useInput(content);
   const [todoList, setTodoList] = useState([]);
   const [state, setState] = useState(todo.state);
-  /*
-        과제
-        수정을 form 이벤트로 바꾸기
-        +
-        체크 수정 구현하기
-        */
 
   const handleTodoEdit = () => {
     if (!isEditMode) return setIsEditMode(true);
