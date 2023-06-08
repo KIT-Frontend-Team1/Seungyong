@@ -1,6 +1,6 @@
-import Todo from '../models/todo/todo.js';
-import { HandlerError } from '../util/handleError.js';
-import { FailureData, SuccessData } from '../util/resultData.js';
+import Todo from "../models/todo/todo.js";
+import { HandlerError } from "../util/handleError.js";
+import { FailureData, SuccessData } from "../util/resultData.js";
 
 export class TodoService {
   static async create(req, res, next) {
@@ -34,7 +34,7 @@ export class TodoService {
       });
 
       if (!todo) {
-        res.status(400).json(FailureData('존재하지 않는 목록입니다'));
+        res.status(400).json(FailureData("존재하지 않는 목록입니다"));
       }
       await Todo.update(
         {
@@ -64,7 +64,7 @@ export class TodoService {
       });
 
       if (!todo) {
-        res.status(400).json(FailureData('존재하지 않는 목록입니다'));
+        res.status(400).json(FailureData("존재하지 않는 목록입니다"));
       }
 
       await Todo.destroy({
