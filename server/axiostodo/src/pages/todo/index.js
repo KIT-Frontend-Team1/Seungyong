@@ -9,46 +9,70 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import { axiosInstance } from "utils/axios";
-import { Api, addTodoApi, getTodoApi } from "apis/Apis";
+
+import { useTodoStore } from "usecontext/Usecontext";
+import useTodoApi from "apis/Apis";
 
 const TodoPage = () => {
+  const { todoList, setTodoList } = useTodoStore();
+  const { addTodoApi, getTodoApi } = useTodoApi();
   const params = useParams();
   const [isAddTodoModal, setIsAddTodoModal] = useState(false);
-  const [todoList, setTodoList] = useState([]);
+  // const [todoList, setTodoList] = useState([]);
+  // useEffect(() => {
+  //   const fetchTodoData = async () => {
+  //     try {
+  //       const data = await getTodoApi();
+  //       setTodoList(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchTodoData();
+  // }, []);
   useEffect(() => {
-    const fetchTodoData = async () => {
-      try {
-        const data = await getTodoApi();
-        setTodoList(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchTodoData();
+    getTodoApi();
+    // console.log("aaaaa", res);
   }, []);
-
-  const showTodoToastMessage = async (e) => {
+  const showTodoToastMessage = (e) => {
     e.preventDefault();
     const title = e.target.title.value;
     const content = e.target.content.value;
-
-    try {
-      await addTodoApi(title, content);
-      toast.success("TODO SUCCESS");
-      const updatedTodoList = await getTodoApi();
-      setTodoList(updatedTodoList);
-      // getTodoList();
-      getTodoApi();
-    } catch (err) {
-      if (err.type === "empty error") {
-        alert(err.message);
-      } else {
-        toast.error("TODO ERROR");
-      }
-    }
-    setIsAddTodoModal(false);
+    toast
+      .promise(addTodoApi(title, content), {
+        pending: "TODO LOADING",
+        success: "TODO SUCCESS",
+        error: "TODO ERROR",
+      })
+      .then(() => setIsAddTodoModal(false))
+      .catch((err) => {
+        if (err.type === "empty error") {
+          alert(err.message);
+        }
+      });
   };
+  // const showTodoToastMessage = async (e) => {
+  //   e.preventDefault();
+  //   const title = e.target.title.value;
+  //   const content = e.target.content.value;
+
+  //   try {
+  //     await addTodoApi(title, content);
+  //     toast.success("TODO SUCCESS");
+  //     // const updatedTodoList = await getTodoApi();
+  //     // setTodoList(updatedTodoList);
+  //     // getTodoList();
+  //     // getTodoApi();
+  //   } catch (err) {
+  //     if (err.type === "empty error") {
+  //       alert(err.message);
+  //     } else {
+  //       toast.error("TODO ERROR");
+  //     }
+  //   }
+  //   setIsAddTodoModal(false);
+  // };
   const toastOption = {
     autoClose: 1000,
     theme: "colored",
@@ -74,7 +98,7 @@ const TodoPage = () => {
         <S.Container>
           <S.Title>List</S.Title>
           <S.Content>
-            <TodoList todoList={todoList} setTodoList={setTodoList} />
+            <TodoList />
           </S.Content>
           <S.ButtonBox>
             <BasicButton
