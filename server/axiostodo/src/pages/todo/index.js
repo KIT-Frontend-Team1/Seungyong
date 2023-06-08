@@ -18,19 +18,6 @@ const TodoPage = () => {
   const { addTodoApi, getTodoApi } = useTodoApi();
   const params = useParams();
   const [isAddTodoModal, setIsAddTodoModal] = useState(false);
-  // const [todoList, setTodoList] = useState([]);
-  // useEffect(() => {
-  //   const fetchTodoData = async () => {
-  //     try {
-  //       const data = await getTodoApi();
-  //       setTodoList(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchTodoData();
-  // }, []);
   useEffect(() => {
     getTodoApi();
     // console.log("aaaaa", res);
@@ -52,27 +39,7 @@ const TodoPage = () => {
         }
       });
   };
-  // const showTodoToastMessage = async (e) => {
-  //   e.preventDefault();
-  //   const title = e.target.title.value;
-  //   const content = e.target.content.value;
 
-  //   try {
-  //     await addTodoApi(title, content);
-  //     toast.success("TODO SUCCESS");
-  //     // const updatedTodoList = await getTodoApi();
-  //     // setTodoList(updatedTodoList);
-  //     // getTodoList();
-  //     // getTodoApi();
-  //   } catch (err) {
-  //     if (err.type === "empty error") {
-  //       alert(err.message);
-  //     } else {
-  //       toast.error("TODO ERROR");
-  //     }
-  //   }
-  //   setIsAddTodoModal(false);
-  // };
   const toastOption = {
     autoClose: 1000,
     theme: "colored",
@@ -204,15 +171,15 @@ const S = {
 //   }
 // };
 /*
-        데이터의 동기화 호출, 다른 사용자의 업데이트 호출, 안정성
-    */
+데이터의 동기화 호출, 다른 사용자의 업데이트 호출, 안정성
+*/
 
 // setTodoList([res.data.data, ...todoList])
 /*
     낙관적 업데이트 (optimistic update)
     데이터의 동기화나 일치보다 UX(사용자 경험)개선이 중요할 때 사용
         반드시 실패 했을 때는 에러 핸들링
-    */
+        */
 
 // const showTodoToastMessage = (e) => {
 //   e.preventDefault();
@@ -243,3 +210,38 @@ const S = {
 // useEffect(() => {
 //   getTodoList();
 // }, []);
+
+// const [todoList, setTodoList] = useState([]);
+// useEffect(() => {
+//   const fetchTodoData = async () => {
+//     try {
+//       const data = await getTodoApi();
+//       setTodoList(data);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+//   fetchTodoData();
+// }, []);
+// const showTodoToastMessage = async (e) => {
+//   e.preventDefault();
+//   const title = e.target.title.value;
+//   const content = e.target.content.value;
+
+//   try {
+//     await addTodoApi(title, content);
+//     toast.success("TODO SUCCESS");
+//     // const updatedTodoList = await getTodoApi();
+//     // setTodoList(updatedTodoList);
+//     // getTodoList();
+//     // getTodoApi();
+//   } catch (err) {
+//     if (err.type === "empty error") {
+//       alert(err.message);
+//     } else {
+//       toast.error("TODO ERROR");
+//     }
+//   }
+//   setIsAddTodoModal(false);
+// };

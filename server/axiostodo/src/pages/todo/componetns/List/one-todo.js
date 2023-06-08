@@ -8,7 +8,7 @@ import { axiosInstance } from "utils/axios";
 import axios from "axios";
 import useTodoApi, {
   deleteTodoApi,
-  toggleTodoStateApi,
+  checkTodoStateApi,
   updateTodoApi,
 } from "apis/Apis";
 import { useTodoStore } from "usecontext/Usecontext";
@@ -17,7 +17,7 @@ const OneTodo = ({ todo, updateTodo, deleteTodo }) => {
   const { id, title, content } = todo;
   const [isEditMode, setIsEditMode] = useState(false);
   const [editContent, onChangeEditContent] = useInput(content);
-  const { updateTodoApi, deleteTodoApi, toggleTodoStateApi } = useTodoApi();
+  const { updateTodoApi, deleteTodoApi, checkTodoStateApi } = useTodoApi();
   const [state, setState] = useState(todo.state);
   const { todoList, setTodoList } = useTodoStore();
 
@@ -31,39 +31,10 @@ const OneTodo = ({ todo, updateTodo, deleteTodo }) => {
     deleteTodoApi(id); // deleteTodoApi 사용
   };
 
-  // const handleTodoCheck = async () => {
-  //   const updatedState = !state;
-  //   try {
-  //     await toggleTodoStateApi(id, updatedState); // toggleTodoStateApi 사용
-  //     updateTodo(id, editContent, updatedState);
-  //     setState(updatedState);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // const handleTodoEdit = () => {
-  //   if (!isEditMode) return setIsEditMode(true);
-  //   updateTodo(id, editContent);
-  //   setIsEditMode(false);
-  // };
-  // const handleTodoDelete = () => {
-  //   deleteTodo(id);
-  // };
-  // const handleTodoCheck = async () => {
-  //   const updatedState = !state;
-  //   try {
-  //     await axiosInstance.put(`/todo/${id}`, { state: updatedState });
-  //     updateTodo(id, editContent, updatedState);
-  //     setState(updatedState);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   return (
     <S.Wrapper state={state}>
       <S.Header>
-        <S.StateBox state={state} onClick={toggleTodoStateApi}>
+        <S.StateBox state={state} onClick={() => checkTodoStateApi(id, state)}>
           <FontAwesomeIcon icon={faCheck} />
         </S.StateBox>
         <S.Title state={state}>
@@ -209,6 +180,35 @@ const S = {
 //     await axiosInstance.delete(`/todo/${id}`);
 //     // getTodoList();
 //     setTodoList((prevList) => prevList.filter((todo) => todo.id !== id));
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// const handleTodoCheck = async () => {
+//   const updatedState = !state;
+//   try {
+//     await toggleTodoStateApi(id, updatedState); // toggleTodoStateApi 사용
+//     updateTodo(id, editContent, updatedState);
+//     setState(updatedState);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+// const handleTodoEdit = () => {
+//   if (!isEditMode) return setIsEditMode(true);
+//   updateTodo(id, editContent);
+//   setIsEditMode(false);
+// };
+// const handleTodoDelete = () => {
+//   deleteTodo(id);
+// };
+// const handleTodoCheck = async () => {
+//   const updatedState = !state;
+//   try {
+//     await axiosInstance.put(`/todo/${id}`, { state: updatedState });
+//     updateTodo(id, editContent, updatedState);
+//     setState(updatedState);
 //   } catch (error) {
 //     console.error(error);
 //   }
