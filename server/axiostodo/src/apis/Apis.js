@@ -4,6 +4,8 @@ import { axiosInstance } from "utils/axios";
 const useTodoApi = () => {
   const { todoList, setTodoList } = useTodoStore();
   // console.log("gkgkgkgk", todoList);
+
+  // 조회
   const getTodoApi = async () => {
     try {
       const res = await axiosInstance.get("/todo");
@@ -20,6 +22,7 @@ const useTodoApi = () => {
     }
   };
 
+  // 추가
   const addTodoApi = async (title, content) => {
     try {
       // if (!title || !content) {
@@ -35,15 +38,17 @@ const useTodoApi = () => {
     }
   };
 
-  const updateTodoApi = async (id, content, state) => {
+  // 수정
+  const updateTodoApi = async (id, state) => {
     try {
-      await axiosInstance.put(`/todo/${id}`, { content, state });
+      await axiosInstance.put(`/todo/${id}`, { state });
       getTodoApi();
     } catch (error) {
       console.error(error);
     }
   };
 
+  // 삭제
   const deleteTodoApi = async (id) => {
     try {
       await axiosInstance.delete(`/todo/${id}`);
@@ -53,14 +58,35 @@ const useTodoApi = () => {
     }
   };
 
-  const checkTodoStateApi = async (id, updatedState) => {
+  // 체크
+  const checkTodoStateApi = async (id, state, content) => {
     try {
-      await axiosInstance.put(`/todo/${id}`, { state: updatedState });
-      getTodoApi();
+      const newState = state === 1 ? 0 : 1; // 클릭하면 state를 1로 만들어주고 한번 더 클릭하면 0으로 만들어준다.
+      await axiosInstance.put(`/todo/${id}`, { content, state: newState });
+      // refresh하지 않아도 체크가 바로 보이게 만들기
+      setTodoList((prevTodoList) =>
+        prevTodoList.map((todo) => {
+          if (todo.id === id) {
+            return { ...todo, state: newState };
+          }
+          return todo;
+        })
+      );
     } catch (error) {
       console.error(error);
     }
   };
+
+  // 이렇게 함수를 작성하면 refresh를 하지않으면 체크가 이루어지지 않는다.
+  // const checkTodoStateApi = async (id, state) => {
+  //   try {
+  //     const newState = state === 1 ? 0 : 1;
+  //     await axiosInstance.put(`/todo/${id}`, { state: newState });
+  //     getTodoApi();
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return {
     todoList,
