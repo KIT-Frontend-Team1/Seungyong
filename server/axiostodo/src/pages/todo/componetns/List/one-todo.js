@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { flexAlignCenter, flexCenter } from "../../../../styles/common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faBan, faPen } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useInput from "../../../../hooks/use-input";
 import { axiosInstance } from "utils/axios";
 import axios from "axios";
@@ -14,16 +14,14 @@ import useTodoApi, {
 import { useTodoStore } from "usecontext/Usecontext";
 
 const OneTodo = ({ todo, updateTodo, deleteTodo }) => {
-  const { id, title, content } = todo;
+  const { id, state, title, content } = todo;
   const [isEditMode, setIsEditMode] = useState(false);
   const [editContent, onChangeEditContent] = useInput(content);
   const { updateTodoApi, deleteTodoApi, checkTodoStateApi } = useTodoApi();
-  const [state, setState] = useState(todo.state);
-  const { todoList, setTodoList } = useTodoStore();
 
   const handleTodoEdit = () => {
     if (!isEditMode) return setIsEditMode(true);
-    updateTodoApi(id, editContent); // updateTodoApi 사용
+    updateTodoApi(id, state, editContent); // updateTodoApi 사용
     setIsEditMode(false);
   };
 
@@ -32,20 +30,21 @@ const OneTodo = ({ todo, updateTodo, deleteTodo }) => {
   };
 
   const handleTodoState = () => {
-    const newState = state === 1 ? 0 : 1;
-    checkTodoStateApi(id, newState, content);
-    setState(newState);
+    // const newState = state === 1 ? 0 : 1;
+    checkTodoStateApi(id, content, !state);
+    // setState(newState);
   };
+
   return (
     <S.Wrapper state={state}>
       <S.Header>
         <S.StateBox
           state={state}
-          onClick={handleTodoState}
+
           // 밑에 처럼 작성하면 refresh해야지 체크가 적용이 된다.
           // onClick={() => checkTodoStateApi(id, state)}
         >
-          <FontAwesomeIcon icon={faCheck} />
+          <FontAwesomeIcon icon={faCheck} onClick={handleTodoState} />
         </S.StateBox>
         <S.Title state={state} isCompleted={state === 1}>
           {title}
@@ -223,3 +222,6 @@ const S = {
 //     console.error(error);
 //   }
 // };
+
+// const [state, setState] = useState(todo.state);
+// const { todoList, setTodoList } = useTodoStore();
