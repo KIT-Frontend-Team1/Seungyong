@@ -31,13 +31,23 @@ const OneTodo = ({ todo, updateTodo, deleteTodo }) => {
     deleteTodoApi(id); // deleteTodoApi 사용
   };
 
+  const handleTodoState = () => {
+    const newState = state === 1 ? 0 : 1;
+    checkTodoStateApi(id, newState, content);
+    setState(newState);
+  };
   return (
     <S.Wrapper state={state}>
       <S.Header>
-        <S.StateBox state={state} onClick={() => checkTodoStateApi(id, state)}>
+        <S.StateBox
+          state={state}
+          onClick={handleTodoState}
+          // 밑에 처럼 작성하면 refresh해야지 체크가 적용이 된다.
+          // onClick={() => checkTodoStateApi(id, state)}
+        >
           <FontAwesomeIcon icon={faCheck} />
         </S.StateBox>
-        <S.Title state={state}>
+        <S.Title state={state} isCompleted={state === 1}>
           {title}
           <div>
             <FontAwesomeIcon icon={faPen} onClick={handleTodoEdit} />
