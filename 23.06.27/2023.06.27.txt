@@ -1,0 +1,45 @@
+serach json server에서 데이터 어떻게 받아올지
+Heroku/Glitch 사용 방법
+검색 API 콜 최적화 방법
+( 중복 요청 없앨 수 있지만 cache 옵션/react-query 사용 안 하는 방법으로 찾아보기 )
+최근 검색어 기능 구현 방법
+웹 페이지를 종료했다 다시 접속해도 기록이 남아있게 하는 방법
+키보드로 상하이동/엔터 키 작동 가능하게 하는 방법 ( + 마우스 클릭으로도 이벤트 발생 )
+검색 단어 하이라이트
+CORS 에러 정의
++) UI/UX 어떻게 꾸밀지
+
+CORS?
+Cross Origin Resource Sharing
+
+CORS는 한 도메인 또는 Origin의 웹 페이지가 다른 도메인 (도메인 간 요청)을 가진 리소스에 액세스 할 수 있게하는 보안 메커니즘이다.
+CORS는 함축 단어로써 이를 풀면 Cross-Origin Resource Sharing 이라는 단어로 이루어 져 있다. 이 문장을 직역하면 
+"교차 출처 리소스 공유 정책"이라고 해석할 수 있는데, 여기서 교차 출처라고 하는 것은 (엇갈린) 다른 출처를 의미하는 것으로 보면 된다.
+
+검색 단어 하이라이트
+https://velog.io/@suyeonme/%ED%85%8D%EC%8A%A4%ED%8A%B8-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8C%85
+
+키보드로 상하이동/엔터 키 작동 가능하게 하는 방법
+https://velog.io/@forest_xox/%EB%A6%AC%EC%95%A1%ED%8A%B8-%EA%B2%80%EC%83%89%EC%B0%BD-%EC%9E%90%EB%8F%99%EC%99%84%EC%84%B1-%ED%82%A4%EB%B3%B4%EB%93%9C-%EC%9D%B4%EB%8F%99
+
+웹 페이지를 종료했다 다시 접속해도 기록이 남아있게 하는 방법
+https://velog.io/@wearehplk/React-cookie
+
+최근 검색어 기능 구현하기
+https://velog.io/@hoon_dev/%EB%A6%AC%EC%95%A1%ED%8A%B8%EB%A1%9C-%EC%B5%9C%EA%B7%BC-%EA%B2%80%EC%83%89%EC%96%B4-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%ED%95%B4%EB%B3%B4%EA%B8%B0
+
+검색 API 콜 최적화 방법
+https://velog.io/@endmoseung/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%BA%90%EC%8B%9C-%ED%98%B8%EC%B6%9C-%EC%B5%9C%EC%A0%81%ED%99%94Debounce%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EA%B2%80%EC%83%89-%EC%B5%9C%EC%A0%81%ED%99%94
+
+Heroku/Glitch 사용 방법
+
+Heroku
+https://jnarin-development-story.tistory.com/163
+
+Glitch
+
+
+serach json server에서 데이터 어떻게 받아올지
+https://velog.io/@gyultang/ReactJson-server%EB%A1%9C-%EC%83%81%ED%92%88%EB%8D%B0%EC%9D%B4%ED%84%B0api-%EB%93%A4%EA%B3%A0%EC%98%A4%EA%B8%B0
+
+
